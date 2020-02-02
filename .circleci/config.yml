@@ -1,0 +1,24 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.13
+
+    steps:
+      - checkout
+
+      - run: mkdir -p /tmp/test-results
+
+      - run:
+          name: Run unit tests
+
+          command: |
+            PACKAGE_NAMES=$(go list ./... | circleci tests split --split-by=timings --timings-type=classname)
+            gotestsum --junitfile /tmp/test-results/gotestsum-report.xml -- $PACKAGE_NAMES
+
+workflows:
+  version: 2
+  build-workflow:
+    jobs:
+      - build
