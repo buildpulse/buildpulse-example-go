@@ -26,6 +26,7 @@ jobs:
           path: /tmp/test-results
           account-id: 2988 # Replace this value with your BuildPulse account ID
           repository-id: 237812225 # Replace this value with your BuildPulse repository ID
+          when-branch-matches: "master"
 
 workflows:
   version: 2
