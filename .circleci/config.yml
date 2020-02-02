@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  buildpulse: workshop64/buildpulse@0.2
+
 jobs:
   build:
     docker:
@@ -7,6 +10,8 @@ jobs:
 
     steps:
       - checkout
+
+      - buildpulse/setup # Set up BuildPulse connection *before* running the test suite
 
       - run: mkdir -p /tmp/test-results
 
@@ -16,6 +21,11 @@ jobs:
           command: |
             PACKAGE_NAMES=$(go list ./... | circleci tests split --split-by=timings --timings-type=classname)
             gotestsum --junitfile /tmp/test-results/gotestsum-report.xml -- $PACKAGE_NAMES
+
+      - buildpulse/upload:
+          path: /tmp/test-results
+          account-id: 2988 # Replace this value with your BuildPulse account ID
+          repository-id: 237812225 # Replace this value with your BuildPulse repository ID
 
 workflows:
   version: 2
