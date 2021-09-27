@@ -14,6 +14,21 @@ jobs:
         with:
           go-version: '1.16'
 
+      - name: Set up gotestsum
+        run: |
+          go install gotest.tools/gotestsum@latest
+
       - name: Run tests
         run: |
-          go test ./...
+          mkdir -p tmp/test-results
+          gotestsum --junitfile tmp/test-results/gotestsum-report.xml ./...
+
+      - name: Upload test results to BuildPulse for flaky test detection
+        if: '!cancelled()' # Run this step even when the tests fail. Skip if the workflow is cancelled.
+        uses: Workshop64/buildpulse-action@main
+        with:
+          account: 68192324 # Replace this value with your BuildPulse account ID
+          repository: 237812225 # Replace this value with your BuildPulse repository ID
+          path: tmp/test-results
+          key: ${{ secrets.BUILDPULSE_ACCESS_KEY_ID }}
+          secret: ${{ secrets.BUILDPULSE_SECRET_ACCESS_KEY }}
