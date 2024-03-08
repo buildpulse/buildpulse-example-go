@@ -1,6 +1,6 @@
 # BuildPulse Example Project: Go (Golang)
 
-This is an example Go project demonstrating how to send test results to [BuildPulse](https://buildpulse.io) to help you detect, track, and eliminate flaky tests.
+This is an example Go project demonstrating how to send test results to [BuildPulse](https://buildpulse.io) to help you find and [fix flaky tests](https://buildpulse.io/products/flaky-tests).
 
 ## CircleCI Integration
 
